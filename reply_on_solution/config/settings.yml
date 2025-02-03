@@ -1,4 +1,4 @@
 plugins:
-  reply_on_solution_enabled:
+  reply_on_solution_enabled: # this file is not necessary as it is not a plugin. It is a custom automation
     default: false
     client: true
