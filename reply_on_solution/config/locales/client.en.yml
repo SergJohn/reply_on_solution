@@ -7,7 +7,7 @@ en:
         fields:
           reply_text:
             label: "Reply Text"
-            description: "The text content of reply to be posted"
+            description: "The text content of reply to be posted - it should be minimum 20 characters long."
           once:
             label: "Run once"
             description: "Run this automation only once per topic."
