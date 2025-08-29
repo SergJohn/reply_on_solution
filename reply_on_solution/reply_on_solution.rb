@@ -3,7 +3,7 @@
 # name: reply-on-solution
 # about: Replies to topics when a solution is accepted
 # version: 0.1
-# authors: discourse-team
+# authors: mrosa
 
 enabled_site_setting :reply_on_solution_enabled
 
