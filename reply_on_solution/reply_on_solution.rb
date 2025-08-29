@@ -1,50 +1,31 @@
 # frozen_string_literal: true
 
-DiscourseAutomation::Scriptable.add(DiscourseAutomation::Scripts::REPLY_ON_SOLUTION) do
-  field :reply_text, component: :text
+# name: reply_on_solution
+# about: An sample test for reply on solution
+# version: 0.0.1
+# authors: mrosa
 
-  version 1
+enabled_site_setting :reply_on_solution
 
-  triggerables [:first_accepted_solution] if defined?(DiscourseSolved)
-
-  script do |context, fields, automation|
-    Rails.logger.warn("DEBUG Automation Context: #{context.inspect}") # Debug line
-    # post = context["post"]
-    # topic = context["accepted_post_id"]
-    # unless post
-    #   Rails.logger.error("No post found in context!")
-    #   return
-    # end
-    accepted_post_id = context["accepted_post_id"]
-    accepted_post = Post.find_by(id: accepted_post_id)
-
-    unless accepted_post
-      Rails.logger.error("Accepted post with id #{accepted_post_id} was not found.")
-      next
-    end
-
-    topic = accepted_post.topic
-    Rails.logger.warn("This is the value of the topic id: #{topic.id}")
-    # Rails.logger.warn("This is the value of the variable topic: #{topic}")
-    # topicid = post.topic.id
-    # Rails.logger.warn("Topic ID: #{topic_id}")
-    reply_text = fields.dig("reply_text", "value")
-
-    # Post a reply in the topic where a solution was marked
-    # PostCreator.create!(
-    #   Discourse.system_user,
-    #   topic_id: topic.id,
-    #   raw: reply_text || "A solution has been marked for this topic!",
-
-    # )
-    begin
-      PostCreator.create!(
-        Discourse.system_user,
-        topic_id: topic.id,
-        raw: reply_text || "A solution has been marked for this topic!",
-      )
-    rescue => e
-      Rails.logger.error("POST CREATION FAILED: #{e.message}\n#{e.backtrace.join("\n")}")
-    end
-  end
-end
+after_initialize do
+    reloadable_patch do
+        if defined?(DiscourseAutomation)
+            on(:first_accepted_solution) do |topic, user|
+                DiscourseAutomation::Automation
+                    .where(enabled: true, trigger: "first_accepted_solution")
+                    .find_each do |automation|
+                    automation.trigger!(
+                        "kind" => "first_accepted_solution",
+                        "usernames" => [user.username],
+                        "topic" => topic,
+                        "placeholders" => {
+                            "sender_username" => user.username,
+                            "word" => "solution",
+                        },
+                    )
+                end
+            end
+            add_automation_triggerable(DiscourseAutomation::Triggerable::FIRST_ACCEPTED_SOLUTION) do
+                field :reply_text, component: :text
+            end
+        end
