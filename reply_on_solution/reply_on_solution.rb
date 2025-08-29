@@ -18,6 +18,7 @@ after_initialize do
 
       # Only allow this script for the "first_accepted_solution" trigger
       triggerables %i[first_accepted_solution]
+      triggerable! :first_accepted_solution
 
       script do |context, fields, automation|
         topic = context["topic"]
