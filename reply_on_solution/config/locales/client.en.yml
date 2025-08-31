@@ -1,4 +1,9 @@
 en:
+  admin_js:
+    admin:
+      site_settings:
+        categories:
+          reply_on_solution: "Reply on solution"
   js:
     scriptables:
       reply_on_solution:
@@ -8,3 +13,4 @@ en:
           reply_text:
             label: "Reply Text"
             description: "The text content of reply to be posted - it should be minimum 20 characters long."
+
