@@ -3,14 +3,12 @@ en:
     admin:
       site_settings:
         categories:
-          reply_on_solution: "Reply on solution"
+          reply_on_solution: "Discourse Reply on Solution"
   js:
-    scriptables:
-      reply_on_solution:
-        name: "Reply on Solution"
-        description: "Automatically posts a reply when a solution is marked"
-        fields:
-          reply_text:
-            label: "Reply Text"
-            description: "The text content of reply to be posted - it should be minimum 20 characters long."
-
+    discourse_automation:
+      scriptables:
+        reply_on_solution:
+          fields:
+            reply_text:
+              label: "Reply Text"
+              description: "The text content of reply to be posted - it should be minimum 20 characters long."
